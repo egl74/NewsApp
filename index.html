@@ -3,21 +3,18 @@
 <body>
     <h1>Welcome to the News app!</h1>
     <label>Pick a news source here: </label>
-    <input type="text" class="pure-button" list="sourceList" id="sourceSelect">
-    <datalist id="sourceList"></datalist>
-    <button class="pure-button" onClick="newsSourceChanged()">Go!</button>
+    <select id="sourceSelect">
+    </select>
 
-    <div class="content">
-        <div>
-            <div class="posts" id ="posts">
-            </div>
+    <button onClick="newsSourceChanged()">Go!</button>
+
+    <div>
+        <div class="posts" id ="posts">
 
         </div>
     </div>
 
-    <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w"
-        crossorigin="anonymous">
-
+    <link rel="stylesheet" href="styles.css"/>
     <script type="text/javascript" src="app.js"></script>
 </body>
 

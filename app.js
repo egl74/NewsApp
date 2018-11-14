@@ -5,25 +5,18 @@ fetch(`https://newsapi.org/v1/sources?apiKey=${apiKey}`)
     .then(data => createSourceSelect(data));
 
 const createSourceSelect = (data) => {
-    const list = document.getElementById('sourceList');
+    const list = document.getElementById('sourceSelect');
     data.sources.forEach(source => {
         var option = document.createElement("option");
-        option.setAttribute("data-value", source.id);
-        option.value = source.name;
+        option.value = source.id;
+        option.innerHTML = source.name;
         list.appendChild(option);
     });
 }
 
 const newsSourceChanged = () => {
     const select = document.getElementById('sourceSelect');
-    const options = select.list.children
-    for (let i = 0; i < options.length; i++) {
-        let option = options[i];
-        if (option.value === select.value) {
-            renderNewsBySourceId(option.getAttribute("data-value"));
-            break;
-        }
-    }
+    renderNewsBySourceId(select.value);
 }
 
 const renderNewsBySourceId = (sourceId) => {
@@ -51,6 +44,7 @@ const renderArticle = (article) => {
     const description = getDescription(article);
     description.appendChild(postImage);
     post.appendChild(description);
+    post.appendChild(document.createElement("br"));
     return post;
 }
 
@@ -60,18 +54,18 @@ const getHeader = (article) => {
     if (article.author) {
         const postMeta = document.createElement('p');
         postMeta.className = 'post-meta';
-        postMeta.innerHTML = `${article.author ? `By ${article.author}` : ''} ${article.publishedAt}`;
+        postMeta.innerHTML = `${article.author && !article.author.indexOf('http') < 0 ? `By ${article.author}` : ''} ${article.publishedAt}`;
         header.appendChild(postMeta);
     }
     return header;
 }
 
-const getTitle = (article) => {
-    const title = document.createElement('h2');
-    title.className = 'post-title';
+const getTitle = (article) => {   
     const link = document.createElement('a');
     link.href = article.url;
-    link.innerHTML = article.title;
+    const title = document.createElement('p');
+    title.className = 'post-title';
+    title.innerHTML = article.title;
     title.appendChild(link);
     return title;
 }
@@ -87,10 +81,8 @@ const getImage = (article) => {
 }
 
 const getDescription = (article) => {
-    const description = document.createElement('h2');
-    description.className = 'post-description';
     const descriptionText = document.createElement('p');
+    descriptionText.className = 'post-description';
     descriptionText.innerHTML = article.description;
-    description.appendChild(descriptionText);
-    return description;
+    return descriptionText;
 }
