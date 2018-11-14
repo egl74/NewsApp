@@ -7,8 +7,7 @@ select {
   }
 
   img {
-      width: 480px;
-      height: 270px;
+      max-width: 480px;
       overflow:hidden;
   }
 
