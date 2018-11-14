@@ -15,7 +15,11 @@
     </div>
 
     <link rel="stylesheet" href="styles.css"/>
-    <script type="text/javascript" src="app.js"></script>
+    <script type="module">
+        import {newsSourceChanged} from './app.js'
+        window.newsSourceChanged = newsSourceChanged;
+    </script>
+    <script type="module" src="./newsRenderer.js"></script>
 </body>
 
 </html>
