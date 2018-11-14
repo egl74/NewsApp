@@ -7,11 +7,14 @@ export const renderNewsBySourceId = (sourceId) => {
 }
 
 const renderArticles = (articles) => {
-    const postsDiv = document.getElementById('posts');
+    const posts = document.getElementById('posts');
+    const postsDiv = document.createElement('div');
     postsDiv.innerHTML = '';
     articles.forEach(article => {
         postsDiv.appendChild(renderArticle(article));
     });
+    posts.innerHTML = '';
+    posts.appendChild(postsDiv);
 }
 
 const renderArticle = (article) => {
@@ -42,12 +45,12 @@ const getHeader = (article) => {
 }
 
 const getTitle = (article) => {   
-    const link = document.createElement('a');
-    link.href = article.url;
-    const title = document.createElement('p');
-    title.className = 'post-title';
-    title.innerHTML = article.title;
-    title.appendChild(link);
+    const title = document.createElement('a');
+    title.href = article.url;
+    const titleText = document.createElement('p');
+    titleText.className = 'post-title';
+    titleText.innerHTML = article.title;
+    title.appendChild(titleText);
     return title;
 }
 
