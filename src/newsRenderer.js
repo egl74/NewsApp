@@ -38,7 +38,7 @@ const getHeader = (article) => {
     if (article.author) {
         const postMeta = document.createElement('p');
         postMeta.className = 'post-meta';
-        postMeta.innerHTML = `${article.author && !article.author.indexOf('http') < 0 ? `By ${article.author}` : ''} ${article.publishedAt}`;
+        postMeta.innerHTML = `${article.author && !article.author.includes('http') ? `By ${article.author}` : ''} ${article.publishedAt}`;
         header.appendChild(postMeta);
     }
     return header;

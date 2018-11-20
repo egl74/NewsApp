@@ -6,9 +6,11 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 })
 
-fetch(`https://newsapi.org/v1/sources?apiKey=${apiKey}`)
+const getNewsSources = async () => fetch(`https://newsapi.org/v1/sources?apiKey=${apiKey}`)
     .then(response => response.json())
     .then(data => createSourceSelect(data));
+
+getNewsSources();
 
 const createSourceSelect = (data) => {
     const list = document.getElementById('sourceSelect');
