@@ -1,4 +1,5 @@
-import { renderNewsBySourceId, apiKey } from './newsRenderer.js'
+//import { renderNewsBySourceId, apiKey } from './newsRenderer.js'
+import "@babel/polyfill";
 
 document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('click', () => {
@@ -10,7 +11,7 @@ const getNewsSources = async () => fetch(`https://newsapi.org/v1/sources?apiKey=
     .then(response => response.json())
     .then(data => createSourceSelect(data));
 
-getNewsSources();
+getNewsSources
 
 const createSourceSelect = (data) => {
     const list = document.getElementById('sourceSelect');
