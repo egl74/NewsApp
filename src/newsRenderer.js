@@ -2,7 +2,7 @@ const apiKey = '1f5c03e664be446b9ae05da3364ed2a6';
 
 const renderNewsBySourceId = async (sourceId) => {
     return await fetch(`https://newsapi.org/v1/articles?source=${sourceId}&apiKey=${apiKey}`)
-        .then(response => response.json())
+        .then(async (response) => await response.json())
         .then(response => renderArticles(response.articles));
 }
 
