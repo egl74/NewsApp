@@ -9,7 +9,8 @@ const getNewsSources = async () => {
   try {
     fetch(`https://newsapi.org/v1/sources?apiKey=${apiKey}`)
       .then(response => response.json())
-      .then(data => createSourceSelect(data));
+      .then(data => createSourceSelect(data))
+      .finally(() => console.log('fetched'));
   } catch (err) {
     alert(err);
   }
@@ -21,6 +22,7 @@ const createSourceSelect = data => {
   const list = document.getElementById("sourceSelect");
   data.sources.forEach(({ id, name }) => {
     var option = document.createElement("option");
+    option.id = "sourceSelectOptions";
     option.value = id;
     option.innerHTML = name;
     list.appendChild(option);
@@ -29,5 +31,10 @@ const createSourceSelect = data => {
 
 const newsSourceChanged = () => {
   const select = document.getElementById("sourceSelect");
-  renderNewsBySourceId(select.value);
+  const selectOptions = document.getElementById("sourceSelect");
+  for await (const option of selectOptions) {
+      if (option.value === select.value) {
+        renderNewsBySourceId(select.value);
+      }
+  }  
 };

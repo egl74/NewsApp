@@ -26,6 +26,8 @@ function () {
                 return response.json();
               }).then(function (data) {
                 return createSourceSelect(data);
+              }).finally(function () {
+                return console.log('fetched');
               });
             } catch (err) {
               alert(err);
@@ -52,6 +54,7 @@ var createSourceSelect = function createSourceSelect(data) {
     var id = _ref2.id,
         name = _ref2.name;
     var option = document.createElement("option");
+    option.id = "sourceSelectOptions";
     option.value = id;
     option.innerHTML = name;
     list.appendChild(option);
@@ -60,5 +63,31 @@ var createSourceSelect = function createSourceSelect(data) {
 
 var newsSourceChanged = function newsSourceChanged() {
   var select = document.getElementById("sourceSelect");
-  renderNewsBySourceId(select.value);
+  var selectOptions = document.getElementById("sourceSelect");
+  var _iteratorNormalCompletion = true;
+  var _didIteratorError = false;
+  var _iteratorError = undefined;
+
+  try {
+    for (var _iterator = selectOptions[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+      var option = _step.value;
+
+      if (option.value === select.value) {
+        renderNewsBySourceId(select.value);
+      }
+    }
+  } catch (err) {
+    _didIteratorError = true;
+    _iteratorError = err;
+  } finally {
+    try {
+      if (!_iteratorNormalCompletion && _iterator.return != null) {
+        _iterator.return();
+      }
+    } finally {
+      if (_didIteratorError) {
+        throw _iteratorError;
+      }
+    }
+  }
 };
