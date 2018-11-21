@@ -1,18 +1,16 @@
-//import { renderNewsBySourceId, apiKey } from './newsRenderer.js'
-import "@babel/polyfill";
-
 document.addEventListener('DOMContentLoaded', () => {
-    document.addEventListener('click', () => {
+    const goButton = document.getElementById('loadNewsButton');
+    goButton.addEventListener('click', () => {
         newsSourceChanged();
     });
 })
 
-const getNewsSources = async () => fetch(`https://newsapi.org/v1/sources?apiKey=${apiKey}`)
+const getNewsSources = () => fetch(`https://newsapi.org/v1/sources?apiKey=${apiKey}`)
     .then(response => response.json())
     .then(data => createSourceSelect(data));
 
-getNewsSources
-
+getNewsSources();
+    
 const createSourceSelect = (data) => {
     const list = document.getElementById('sourceSelect');
     data.sources.forEach(({id, name}) => {
@@ -23,7 +21,7 @@ const createSourceSelect = (data) => {
     });
 }
 
-export const newsSourceChanged = () => {
+const newsSourceChanged = () => {
     const select = document.getElementById('sourceSelect');
     renderNewsBySourceId(select.value);
 }
