@@ -16,29 +16,59 @@ var getNewsSources =
 function () {
   var _ref = _asyncToGenerator(
   /*#__PURE__*/
-  regeneratorRuntime.mark(function _callee() {
-    return regeneratorRuntime.wrap(function _callee$(_context) {
+  regeneratorRuntime.mark(function _callee2() {
+    return regeneratorRuntime.wrap(function _callee2$(_context2) {
       while (1) {
-        switch (_context.prev = _context.next) {
+        switch (_context2.prev = _context2.next) {
           case 0:
-            try {
-              fetch("https://newsapi.org/v1/sources?apiKey=".concat(apiKey)).then(function (response) {
-                return response.json();
-              }).then(function (data) {
-                return createSourceSelect(data);
-              }).finally(function () {
-                return console.log('fetched');
-              });
-            } catch (err) {
-              alert(err);
-            }
+            _context2.prev = 0;
+            _context2.next = 3;
+            return fetch("https://newsapi.org/v1/sources?apiKey=".concat(apiKey)).then(
+            /*#__PURE__*/
+            function () {
+              var _ref2 = _asyncToGenerator(
+              /*#__PURE__*/
+              regeneratorRuntime.mark(function _callee(response) {
+                return regeneratorRuntime.wrap(function _callee$(_context) {
+                  while (1) {
+                    switch (_context.prev = _context.next) {
+                      case 0:
+                        _context.next = 2;
+                        return response.json();
 
-          case 1:
+                      case 2:
+                        return _context.abrupt("return", _context.sent);
+
+                      case 3:
+                      case "end":
+                        return _context.stop();
+                    }
+                  }
+                }, _callee, this);
+              }));
+
+              return function (_x) {
+                return _ref2.apply(this, arguments);
+              };
+            }()).then(function (data) {
+              return createSourceSelect(data);
+            });
+
+          case 3:
+            _context2.next = 8;
+            break;
+
+          case 5:
+            _context2.prev = 5;
+            _context2.t0 = _context2["catch"](0);
+            alert(_context2.t0);
+
+          case 8:
           case "end":
-            return _context.stop();
+            return _context2.stop();
         }
       }
-    }, _callee, this);
+    }, _callee2, this, [[0, 5]]);
   }));
 
   return function getNewsSources() {
@@ -50,9 +80,9 @@ getNewsSources();
 
 var createSourceSelect = function createSourceSelect(data) {
   var list = document.getElementById("sourceSelect");
-  data.sources.forEach(function (_ref2) {
-    var id = _ref2.id,
-        name = _ref2.name;
+  data.sources.forEach(function (_ref3) {
+    var id = _ref3.id,
+        name = _ref3.name;
     var option = document.createElement("option");
     option.id = "sourceSelectOptions";
     option.value = id;

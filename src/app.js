@@ -7,10 +7,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
 const getNewsSources = async () => {
   try {
-    fetch(`https://newsapi.org/v1/sources?apiKey=${apiKey}`)
-      .then(response => response.json())
-      .then(data => createSourceSelect(data))
-      .finally(() => console.log('fetched'));
+    await fetch(`https://newsapi.org/v1/sources?apiKey=${apiKey}`)
+      .then(async (response) => await response.json())
+      .then(data => createSourceSelect(data));
   } catch (err) {
     alert(err);
   }
