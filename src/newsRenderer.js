@@ -1,7 +1,7 @@
-export const apiKey = '1f5c03e664be446b9ae05da3364ed2a6';
+const apiKey = '1f5c03e664be446b9ae05da3364ed2a6';
 
-export const renderNewsBySourceId = (sourceId) => {
-    return fetch(`https://newsapi.org/v1/articles?source=${sourceId}&apiKey=${apiKey}`)
+const renderNewsBySourceId = async (sourceId) => {
+    return await fetch(`https://newsapi.org/v1/articles?source=${sourceId}&apiKey=${apiKey}`)
         .then(response => response.json())
         .then(response => renderArticles(response.articles));
 }
@@ -38,7 +38,7 @@ const getHeader = (article) => {
     if (article.author) {
         const postMeta = document.createElement('p');
         postMeta.className = 'post-meta';
-        postMeta.innerHTML = `${article.author && !article.author.indexOf('http') < 0 ? `By ${article.author}` : ''} ${article.publishedAt}`;
+        postMeta.innerHTML = `${article.author && !article.author.includes('http') ? `By ${article.author}` : ''} ${article.publishedAt}`;
         header.appendChild(postMeta);
     }
     return header;
