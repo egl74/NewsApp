@@ -5,7 +5,7 @@
   "main": "src/app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "babel src --out-file compiled.js"
+    "build": "babel src --out-dir build"
   },
   "repository": {
     "type": "git",
@@ -23,6 +23,8 @@
     "@babel/preset-env": "^7.1.6"
   },
   "dependencies": {
-    "@babel/polyfill": "^7.0.0"
+    "@babel/polyfill": "^7.0.0",
+    "regenerator": "^0.13.3",
+    "whatwg-fetch": "^3.0.0"
   }
 }

@@ -1,23 +1,23 @@
 const apiKey = '1f5c03e664be446b9ae05da3364ed2a6';
 
-const renderNewsBySourceId = (sourceId) => {
+const renderNewsBySourceId = async (sourceId) => {
     return await fetch(`https://newsapi.org/v1/articles?source=${sourceId}&apiKey=${apiKey}`)
         .then(response => response.json())
-        .then(response => await renderArticles(response.articles));
+        .then(response => renderArticles(response.articles));
 }
 
-const renderArticles = async (articles) => {
+const renderArticles = (articles) => {
     const posts = document.getElementById('posts');
     const postsDiv = document.createElement('div');
     postsDiv.innerHTML = '';
     articles.forEach(article => {
-        postsDiv.appendChild(await renderArticle(article));
+        postsDiv.appendChild(renderArticle(article));
     });
     posts.innerHTML = '';
     posts.appendChild(postsDiv);
 }
 
-const renderArticle = async (article) => {
+const renderArticle = (article) => {
     const post = document.createElement('section');
     post.className = 'post';
     const header = getHeader(article);
@@ -29,7 +29,7 @@ const renderArticle = async (article) => {
     description.appendChild(postImage);
     post.appendChild(description);
     post.appendChild(document.createElement("br"));
-    return Promise.resolve(post);
+    return post;
 }
 
 const getHeader = (article) => {
