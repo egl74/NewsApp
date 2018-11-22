@@ -64,11 +64,16 @@ function () {
             alert(_context2.t0);
 
           case 8:
+            _context2.prev = 8;
+            console.log("fetched");
+            return _context2.finish(8);
+
+          case 11:
           case "end":
             return _context2.stop();
         }
       }
-    }, _callee2, this, [[0, 5]]);
+    }, _callee2, this, [[0, 5, 8, 11]]);
   }));
 
   return function getNewsSources() {
@@ -80,26 +85,27 @@ getNewsSources();
 
 var createSourceSelect = function createSourceSelect(data) {
   var list = document.getElementById("sourceSelect");
-  data.sources.forEach(function (_ref3) {
-    var id = _ref3.id,
-        name = _ref3.name;
+  data.sources.forEach(function (source) {
     var option = document.createElement("option");
-    option.id = "sourceSelectOptions";
-    option.value = id;
-    option.innerHTML = name;
+    var keyValues = Object.entries(source);
+    option.value = keyValues.filter(function (keyValue) {
+      return keyValue[0] == 'id';
+    })[0][1];
+    option.innerHTML = keyValues.filter(function (keyValue) {
+      return keyValue[0] == 'name';
+    })[0][1];
     list.appendChild(option);
   });
 };
 
 var newsSourceChanged = function newsSourceChanged() {
   var select = document.getElementById("sourceSelect");
-  var selectOptions = document.getElementById("sourceSelect");
   var _iteratorNormalCompletion = true;
   var _didIteratorError = false;
   var _iteratorError = undefined;
 
   try {
-    for (var _iterator = selectOptions[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+    for (var _iterator = select.options[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
       var option = _step.value;
 
       if (option.value === select.value) {

@@ -24,7 +24,6 @@
   },
   "dependencies": {
     "@babel/polyfill": "^7.0.0",
-    "regenerator": "^0.13.3",
     "whatwg-fetch": "^3.0.0"
   }
 }
