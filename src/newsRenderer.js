@@ -6,7 +6,7 @@ const renderNewsBySourceId = async (sourceId) => {
         .then(response => renderArticles(response.articles));
 }
 
-const renderArticles = (articles) => {
+const renderArticles = (articles,) => {
     const posts = document.getElementById('posts');
     const postsDiv = document.createElement('div');
     postsDiv.innerHTML = '';
@@ -17,7 +17,7 @@ const renderArticles = (articles) => {
     posts.appendChild(postsDiv);
 }
 
-const renderArticle = (article) => {
+const renderArticle = (article,) => {
     const post = document.createElement('section');
     post.className = 'post';
     const header = getHeader(article);
