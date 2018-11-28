@@ -1,11 +1,16 @@
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+
 module.exports = {
   entry: './src/app.js',
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: './index.html'
+    })
+  ],
   module: {
-    rules: [
-      {
+    rules: [{
         test: /\.scss$/,
-        use: [
-          {
+        use: [{
             loader: 'style-loader' // creates style nodes from JS strings
           },
           {

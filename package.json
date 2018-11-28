@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack --mode development",
     "build-prod": "webpack --mode production",
-    "start": "cp index.html ./dist && cp -r ./lib ./dist && webpack-dev-server --open",
+    "start": "cp -r ./lib ./dist && webpack-dev-server --open",
     "prod": ""
   },
   "repository": {
@@ -34,6 +34,7 @@
   "dependencies": {
     "@babel/polyfill": "^7.0.0",
     "css-loader": "^1.0.1",
+    "html-webpack-plugin": "^3.2.0",
     "style-loader": "^0.23.1",
     "whatwg-fetch": "^3.0.0"
   }
