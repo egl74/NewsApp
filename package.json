@@ -7,6 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack --mode development",
     "build-prod": "webpack --mode production",
+    "start": "cp index.html ./dist && cp -r ./lib ./dist && webpack-dev-server --open",
     "prod": ""
   },
   "repository": {
@@ -27,7 +28,8 @@
     "node-sass": "^4.10.0",
     "sass-loader": "^7.1.0",
     "webpack": "^4.26.1",
-    "webpack-cli": "^3.1.2"
+    "webpack-cli": "^3.1.2",
+    "webpack-dev-server": "^3.1.10"
   },
   "dependencies": {
     "@babel/polyfill": "^7.0.0",
