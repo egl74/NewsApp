@@ -1,3 +1,5 @@
+import '../styles.scss';
+
 const newsRenderer = require("./newsRenderer.js");
 
 document.addEventListener("DOMContentLoaded", () => {
