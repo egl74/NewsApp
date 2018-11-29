@@ -2,7 +2,6 @@ import '../styles.scss';
 import '../lib/polyfill.min.js';
 
 const sharedConstants = require('./sharedConstants.js');
-const newsRenderer = require("./newsRenderer.js");
 
 document.addEventListener("DOMContentLoaded", () => {
   const goButton = document.getElementById("loadNewsButton");
@@ -36,9 +35,11 @@ const createSourceSelect = data => {
 
 const newsSourceChanged = () => {
   const select = document.getElementById("sourceSelect");
-  for (const option of select.options) {
-    if (option.value === select.value) {
-      newsRenderer.renderNewsBySourceId(select.value);
+  import('./newsRenderer.js').then(newsRenderer => {
+    for (const option of select.options) {
+      if (option.value === select.value) {
+        newsRenderer.renderNewsBySourceId(select.value);
+      }
     }
-  }
+  });
 };

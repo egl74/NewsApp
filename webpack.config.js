@@ -3,12 +3,11 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 module.exports = {
   entry: {
     './app': './src/app.js',
-    './newsRenderer': './src/newsRenderer.js',
-    './sharedConstants': './src/sharedConstants.js'
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: './index.html'
+      template: './index.html',
+      inject: false
     })
   ],
   module: {
@@ -31,7 +30,8 @@ module.exports = {
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ['@babel/preset-env']
+            presets: ['@babel/preset-env'],
+            plugins: ["@babel/plugin-syntax-dynamic-import"]
           }
         }
       }

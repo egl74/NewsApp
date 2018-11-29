@@ -5,7 +5,7 @@
   "main": "src/app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack --mode development",
+    "build": "cp -r ./lib ./dist && webpack --mode development",
     "build-prod": "webpack --mode production",
     "start": "cp -r ./lib ./dist && webpack-dev-server --open",
     "prod": ""

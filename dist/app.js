@@ -1,6 +1,50 @@
 /******/ (function(modules) { // webpackBootstrap
+/******/ 	// install a JSONP callback for chunk loading
+/******/ 	function webpackJsonpCallback(data) {
+/******/ 		var chunkIds = data[0];
+/******/ 		var moreModules = data[1];
+/******/
+/******/
+/******/ 		// add "moreModules" to the modules object,
+/******/ 		// then flag all "chunkIds" as loaded and fire callback
+/******/ 		var moduleId, chunkId, i = 0, resolves = [];
+/******/ 		for(;i < chunkIds.length; i++) {
+/******/ 			chunkId = chunkIds[i];
+/******/ 			if(installedChunks[chunkId]) {
+/******/ 				resolves.push(installedChunks[chunkId][0]);
+/******/ 			}
+/******/ 			installedChunks[chunkId] = 0;
+/******/ 		}
+/******/ 		for(moduleId in moreModules) {
+/******/ 			if(Object.prototype.hasOwnProperty.call(moreModules, moduleId)) {
+/******/ 				modules[moduleId] = moreModules[moduleId];
+/******/ 			}
+/******/ 		}
+/******/ 		if(parentJsonpFunction) parentJsonpFunction(data);
+/******/
+/******/ 		while(resolves.length) {
+/******/ 			resolves.shift()();
+/******/ 		}
+/******/
+/******/ 	};
+/******/
+/******/
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
+/******/
+/******/ 	// object to store loaded and loading chunks
+/******/ 	// undefined = chunk not loaded, null = chunk preloaded/prefetched
+/******/ 	// Promise = chunk loading, 0 = chunk loaded
+/******/ 	var installedChunks = {
+/******/ 		"./app": 0
+/******/ 	};
+/******/
+/******/
+/******/
+/******/ 	// script path function
+/******/ 	function jsonpScriptSrc(chunkId) {
+/******/ 		return __webpack_require__.p + "" + ({}[chunkId]||chunkId) + ".js"
+/******/ 	}
 /******/
 /******/ 	// The require function
 /******/ 	function __webpack_require__(moduleId) {
@@ -26,6 +70,65 @@
 /******/ 		return module.exports;
 /******/ 	}
 /******/
+/******/ 	// This file contains only the entry chunk.
+/******/ 	// The chunk loading function for additional chunks
+/******/ 	__webpack_require__.e = function requireEnsure(chunkId) {
+/******/ 		var promises = [];
+/******/
+/******/
+/******/ 		// JSONP chunk loading for javascript
+/******/
+/******/ 		var installedChunkData = installedChunks[chunkId];
+/******/ 		if(installedChunkData !== 0) { // 0 means "already installed".
+/******/
+/******/ 			// a Promise means "currently loading".
+/******/ 			if(installedChunkData) {
+/******/ 				promises.push(installedChunkData[2]);
+/******/ 			} else {
+/******/ 				// setup Promise in chunk cache
+/******/ 				var promise = new Promise(function(resolve, reject) {
+/******/ 					installedChunkData = installedChunks[chunkId] = [resolve, reject];
+/******/ 				});
+/******/ 				promises.push(installedChunkData[2] = promise);
+/******/
+/******/ 				// start chunk loading
+/******/ 				var head = document.getElementsByTagName('head')[0];
+/******/ 				var script = document.createElement('script');
+/******/ 				var onScriptComplete;
+/******/
+/******/ 				script.charset = 'utf-8';
+/******/ 				script.timeout = 120;
+/******/ 				if (__webpack_require__.nc) {
+/******/ 					script.setAttribute("nonce", __webpack_require__.nc);
+/******/ 				}
+/******/ 				script.src = jsonpScriptSrc(chunkId);
+/******/
+/******/ 				onScriptComplete = function (event) {
+/******/ 					// avoid mem leaks in IE.
+/******/ 					script.onerror = script.onload = null;
+/******/ 					clearTimeout(timeout);
+/******/ 					var chunk = installedChunks[chunkId];
+/******/ 					if(chunk !== 0) {
+/******/ 						if(chunk) {
+/******/ 							var errorType = event && (event.type === 'load' ? 'missing' : event.type);
+/******/ 							var realSrc = event && event.target && event.target.src;
+/******/ 							var error = new Error('Loading chunk ' + chunkId + ' failed.\n(' + errorType + ': ' + realSrc + ')');
+/******/ 							error.type = errorType;
+/******/ 							error.request = realSrc;
+/******/ 							chunk[1](error);
+/******/ 						}
+/******/ 						installedChunks[chunkId] = undefined;
+/******/ 					}
+/******/ 				};
+/******/ 				var timeout = setTimeout(function(){
+/******/ 					onScriptComplete({ type: 'timeout', target: script });
+/******/ 				}, 120000);
+/******/ 				script.onerror = script.onload = onScriptComplete;
+/******/ 				head.appendChild(script);
+/******/ 			}
+/******/ 		}
+/******/ 		return Promise.all(promises);
+/******/ 	};
 /******/
 /******/ 	// expose the modules object (__webpack_modules__)
 /******/ 	__webpack_require__.m = modules;
@@ -78,6 +181,16 @@
 /******/
 /******/ 	// __webpack_public_path__
 /******/ 	__webpack_require__.p = "";
+/******/
+/******/ 	// on error function for async loading
+/******/ 	__webpack_require__.oe = function(err) { console.error(err); throw err; };
+/******/
+/******/ 	var jsonpArray = window["webpackJsonp"] = window["webpackJsonp"] || [];
+/******/ 	var oldJsonpFunction = jsonpArray.push.bind(jsonpArray);
+/******/ 	jsonpArray.push = webpackJsonpCallback;
+/******/ 	jsonpArray = jsonpArray.slice();
+/******/ 	for(var i = 0; i < jsonpArray.length; i++) webpackJsonpCallback(jsonpArray[i]);
+/******/ 	var parentJsonpFunction = oldJsonpFunction;
 /******/
 /******/
 /******/ 	// Load entry module and return exports
@@ -160,18 +273,7 @@ eval("var g;\n\n// This works in non-strict mode\ng = (function() {\n\treturn th
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _styles_scss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../styles.scss */ \"./styles.scss\");\n/* harmony import */ var _styles_scss__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_styles_scss__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var _lib_polyfill_min_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../lib/polyfill.min.js */ \"./lib/polyfill.min.js\");\n/* harmony import */ var _lib_polyfill_min_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_lib_polyfill_min_js__WEBPACK_IMPORTED_MODULE_1__);\nfunction asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }\n\nfunction _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, \"next\", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, \"throw\", err); } _next(undefined); }); }; }\n\n\n\n\nvar sharedConstants = __webpack_require__(/*! ./sharedConstants.js */ \"./src/sharedConstants.js\");\n\nvar newsRenderer = __webpack_require__(/*! ./newsRenderer.js */ \"./src/newsRenderer.js\");\n\ndocument.addEventListener(\"DOMContentLoaded\", function () {\n  var goButton = document.getElementById(\"loadNewsButton\");\n  goButton.addEventListener(\"click\", function () {\n    newsSourceChanged();\n  });\n});\n\nvar getNewsSources =\n/*#__PURE__*/\nfunction () {\n  var _ref = _asyncToGenerator(\n  /*#__PURE__*/\n  regeneratorRuntime.mark(function _callee2() {\n    return regeneratorRuntime.wrap(function _callee2$(_context2) {\n      while (1) {\n        switch (_context2.prev = _context2.next) {\n          case 0:\n            _context2.next = 2;\n            return fetch(\"https://newsapi.org/v1/sources?apiKey=\".concat(newsRenderer.apiKey)).then(\n            /*#__PURE__*/\n            function () {\n              var _ref2 = _asyncToGenerator(\n              /*#__PURE__*/\n              regeneratorRuntime.mark(function _callee(response) {\n                return regeneratorRuntime.wrap(function _callee$(_context) {\n                  while (1) {\n                    switch (_context.prev = _context.next) {\n                      case 0:\n                        _context.next = 2;\n                        return response.json();\n\n                      case 2:\n                        return _context.abrupt(\"return\", _context.sent);\n\n                      case 3:\n                      case \"end\":\n                        return _context.stop();\n                    }\n                  }\n                }, _callee, this);\n              }));\n\n              return function (_x) {\n                return _ref2.apply(this, arguments);\n              };\n            }()).then(function (data) {\n              return createSourceSelect(data);\n            }).catch(function (err) {\n              return alert(err);\n            }).finally(function () {\n              return console.log(\"fetched\");\n            });\n\n          case 2:\n          case \"end\":\n            return _context2.stop();\n        }\n      }\n    }, _callee2, this);\n  }));\n\n  return function getNewsSources() {\n    return _ref.apply(this, arguments);\n  };\n}();\n\ngetNewsSources();\n\nvar createSourceSelect = function createSourceSelect(data) {\n  var list = document.getElementById(\"sourceSelect\");\n  data.sources.forEach(function (source) {\n    var option = document.createElement(\"option\");\n    var keyValues = Object.entries(source);\n    option.value = keyValues.filter(function (keyValue) {\n      return keyValue[0] == \"id\";\n    })[0][1];\n    option.innerHTML = keyValues.filter(function (keyValue) {\n      return keyValue[0] == \"name\";\n    })[0][1];\n    list.appendChild(option);\n  });\n};\n\nvar newsSourceChanged = function newsSourceChanged() {\n  var select = document.getElementById(\"sourceSelect\");\n  var _iteratorNormalCompletion = true;\n  var _didIteratorError = false;\n  var _iteratorError = undefined;\n\n  try {\n    for (var _iterator = select.options[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {\n      var option = _step.value;\n\n      if (option.value === select.value) {\n        newsRenderer.renderNewsBySourceId(select.value);\n      }\n    }\n  } catch (err) {\n    _didIteratorError = true;\n    _iteratorError = err;\n  } finally {\n    try {\n      if (!_iteratorNormalCompletion && _iterator.return != null) {\n        _iterator.return();\n      }\n    } finally {\n      if (_didIteratorError) {\n        throw _iteratorError;\n      }\n    }\n  }\n};\n\n//# sourceURL=webpack:///./src/app.js?");
-
-/***/ }),
-
-/***/ "./src/newsRenderer.js":
-/*!*****************************!*\
-  !*** ./src/newsRenderer.js ***!
-  \*****************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-eval("function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }\n\nfunction _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, \"next\", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, \"throw\", err); } _next(undefined); }); }; }\n\nvar sharedConstants = __webpack_require__(/*! ./sharedConstants.js */ \"./src/sharedConstants.js\");\n\nvar renderNewsBySourceId =\n/*#__PURE__*/\nfunction () {\n  var _ref = _asyncToGenerator(\n  /*#__PURE__*/\n  regeneratorRuntime.mark(function _callee2(sourceId) {\n    return regeneratorRuntime.wrap(function _callee2$(_context2) {\n      while (1) {\n        switch (_context2.prev = _context2.next) {\n          case 0:\n            _context2.next = 2;\n            return fetch(\"https://newsapi.org/v1/articles?source=\".concat(sourceId, \"&apiKey=\").concat(sharedConstants.apiKey)).then(\n            /*#__PURE__*/\n            function () {\n              var _ref2 = _asyncToGenerator(\n              /*#__PURE__*/\n              regeneratorRuntime.mark(function _callee(response) {\n                return regeneratorRuntime.wrap(function _callee$(_context) {\n                  while (1) {\n                    switch (_context.prev = _context.next) {\n                      case 0:\n                        _context.next = 2;\n                        return response.json();\n\n                      case 2:\n                        return _context.abrupt(\"return\", _context.sent);\n\n                      case 3:\n                      case \"end\":\n                        return _context.stop();\n                    }\n                  }\n                }, _callee, this);\n              }));\n\n              return function (_x2) {\n                return _ref2.apply(this, arguments);\n              };\n            }()).then(function (response) {\n              return renderArticles(response.articles);\n            });\n\n          case 2:\n            return _context2.abrupt(\"return\", _context2.sent);\n\n          case 3:\n          case \"end\":\n            return _context2.stop();\n        }\n      }\n    }, _callee2, this);\n  }));\n\n  return function renderNewsBySourceId(_x) {\n    return _ref.apply(this, arguments);\n  };\n}();\n\nvar renderArticles = function renderArticles(articles) {\n  var posts = document.getElementById('posts');\n  var postsDiv = document.createElement('div');\n  postsDiv.innerHTML = '';\n  articles.forEach(function (article) {\n    postsDiv.appendChild(renderArticle(article));\n  });\n  posts.innerHTML = '';\n  posts.appendChild(postsDiv);\n};\n\nvar renderArticle = function renderArticle(article) {\n  var post = document.createElement('section');\n  post.className = 'post';\n  var header = getHeader(article);\n  var postImage = getImage(article);\n  var title = getTitle(article);\n  header.appendChild(title);\n  post.appendChild(header);\n  var description = getDescription(article);\n  description.appendChild(postImage);\n  post.appendChild(description);\n  post.appendChild(document.createElement(\"br\"));\n  return post;\n};\n\nvar getHeader = function getHeader(article) {\n  var header = document.createElement('header');\n  header.className = 'post-header';\n\n  if (article.author) {\n    var postMeta = document.createElement('p');\n    postMeta.className = 'post-meta';\n    postMeta.innerHTML = \"\".concat(article.author && !article.author.includes('http') ? \"By \".concat(article.author) : '', \" \").concat(article.publishedAt);\n    header.appendChild(postMeta);\n  }\n\n  return header;\n};\n\nvar getTitle = function getTitle(article) {\n  var title = document.createElement('a');\n  title.href = article.url;\n  var titleText = document.createElement('p');\n  titleText.className = 'post-title';\n  titleText.innerHTML = article.title;\n  title.appendChild(titleText);\n  return title;\n};\n\nvar getImage = function getImage(article) {\n  var postImage = document.createElement('div');\n  postImage.className = 'post-images';\n  var img = document.createElement('img');\n  img.className = 'pure-img-responsive';\n  img.src = article.urlToImage;\n  postImage.appendChild(img);\n  return postImage;\n};\n\nvar getDescription = function getDescription(article) {\n  var descriptionText = document.createElement('p');\n  descriptionText.className = 'post-description';\n  descriptionText.innerHTML = article.description;\n  return descriptionText;\n};\n\nmodule.exports = {\n  renderNewsBySourceId: renderNewsBySourceId\n};\n\n//# sourceURL=webpack:///./src/newsRenderer.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _styles_scss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../styles.scss */ \"./styles.scss\");\n/* harmony import */ var _styles_scss__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_styles_scss__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var _lib_polyfill_min_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../lib/polyfill.min.js */ \"./lib/polyfill.min.js\");\n/* harmony import */ var _lib_polyfill_min_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_lib_polyfill_min_js__WEBPACK_IMPORTED_MODULE_1__);\nfunction asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }\n\nfunction _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, \"next\", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, \"throw\", err); } _next(undefined); }); }; }\n\n\n\n\nvar sharedConstants = __webpack_require__(/*! ./sharedConstants.js */ \"./src/sharedConstants.js\");\n\ndocument.addEventListener(\"DOMContentLoaded\", function () {\n  var goButton = document.getElementById(\"loadNewsButton\");\n  goButton.addEventListener(\"click\", function () {\n    newsSourceChanged();\n  });\n});\n\nvar getNewsSources =\n/*#__PURE__*/\nfunction () {\n  var _ref = _asyncToGenerator(\n  /*#__PURE__*/\n  regeneratorRuntime.mark(function _callee2() {\n    return regeneratorRuntime.wrap(function _callee2$(_context2) {\n      while (1) {\n        switch (_context2.prev = _context2.next) {\n          case 0:\n            _context2.next = 2;\n            return fetch(\"https://newsapi.org/v1/sources?apiKey=\".concat(sharedConstants.apiKey)).then(\n            /*#__PURE__*/\n            function () {\n              var _ref2 = _asyncToGenerator(\n              /*#__PURE__*/\n              regeneratorRuntime.mark(function _callee(response) {\n                return regeneratorRuntime.wrap(function _callee$(_context) {\n                  while (1) {\n                    switch (_context.prev = _context.next) {\n                      case 0:\n                        _context.next = 2;\n                        return response.json();\n\n                      case 2:\n                        return _context.abrupt(\"return\", _context.sent);\n\n                      case 3:\n                      case \"end\":\n                        return _context.stop();\n                    }\n                  }\n                }, _callee, this);\n              }));\n\n              return function (_x) {\n                return _ref2.apply(this, arguments);\n              };\n            }()).then(function (data) {\n              return createSourceSelect(data);\n            }).catch(function (err) {\n              return alert(err);\n            }).finally(function () {\n              return console.log(\"fetched\");\n            });\n\n          case 2:\n          case \"end\":\n            return _context2.stop();\n        }\n      }\n    }, _callee2, this);\n  }));\n\n  return function getNewsSources() {\n    return _ref.apply(this, arguments);\n  };\n}();\n\ngetNewsSources();\n\nvar createSourceSelect = function createSourceSelect(data) {\n  var list = document.getElementById(\"sourceSelect\");\n  data.sources.forEach(function (source) {\n    var option = document.createElement(\"option\");\n    var keyValues = Object.entries(source);\n    option.value = keyValues.filter(function (keyValue) {\n      return keyValue[0] == \"id\";\n    })[0][1];\n    option.innerHTML = keyValues.filter(function (keyValue) {\n      return keyValue[0] == \"name\";\n    })[0][1];\n    list.appendChild(option);\n  });\n};\n\nvar newsSourceChanged = function newsSourceChanged() {\n  var select = document.getElementById(\"sourceSelect\");\n  __webpack_require__.e(/*! import() */ 0).then(__webpack_require__.t.bind(null, /*! ./newsRenderer.js */ \"./src/newsRenderer.js\", 7)).then(function (newsRenderer) {\n    var _iteratorNormalCompletion = true;\n    var _didIteratorError = false;\n    var _iteratorError = undefined;\n\n    try {\n      for (var _iterator = select.options[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {\n        var option = _step.value;\n\n        if (option.value === select.value) {\n          newsRenderer.renderNewsBySourceId(select.value);\n        }\n      }\n    } catch (err) {\n      _didIteratorError = true;\n      _iteratorError = err;\n    } finally {\n      try {\n        if (!_iteratorNormalCompletion && _iterator.return != null) {\n          _iterator.return();\n        }\n      } finally {\n        if (_didIteratorError) {\n          throw _iteratorError;\n        }\n      }\n    }\n  });\n};\n\n//# sourceURL=webpack:///./src/app.js?");
 
 /***/ }),
 
