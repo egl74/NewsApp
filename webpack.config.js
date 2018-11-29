@@ -1,7 +1,11 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-  entry: './src/app.js',
+  entry: {
+    './app': './src/app.js',
+    './newsRenderer': './src/newsRenderer.js',
+    './sharedConstants': './src/sharedConstants.js'
+  },
   plugins: [
     new HtmlWebpackPlugin({
       template: './index.html'

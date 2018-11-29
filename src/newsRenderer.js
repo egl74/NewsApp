@@ -1,7 +1,7 @@
-const apiKey = '1f5c03e664be446b9ae05da3364ed2a6';
+const sharedConstants = require('./sharedConstants.js');
 
 const renderNewsBySourceId = async (sourceId) => {
-    return await fetch(`https://newsapi.org/v1/articles?source=${sourceId}&apiKey=${apiKey}`)
+    return await fetch(`https://newsapi.org/v1/articles?source=${sourceId}&apiKey=${sharedConstants.apiKey}`)
         .then(async (response) => await response.json())
         .then(response => renderArticles(response.articles));
 }
@@ -72,6 +72,5 @@ const getDescription = (article) => {
 }
 
 module.exports = {
-    apiKey: apiKey,
     renderNewsBySourceId: renderNewsBySourceId
 }
