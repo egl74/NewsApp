@@ -1,4 +1,7 @@
-const newsRenderer = require("./newsRenderer.js");
+import '../styles.scss';
+import '../lib/polyfill.min.js';
+
+const sharedConstants = require('./sharedConstants.js');
 
 document.addEventListener("DOMContentLoaded", () => {
   const goButton = document.getElementById("loadNewsButton");
@@ -8,7 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 const getNewsSources = async () => {
-  await fetch(`https://newsapi.org/v1/sources?apiKey=${newsRenderer.apiKey}`)
+  await fetch(`https://newsapi.org/v1/sources?apiKey=${sharedConstants.apiKey}`)
     .then(async response => await response.json())
     .then(data => createSourceSelect(data))
     .catch(err => alert(err))
@@ -32,9 +35,11 @@ const createSourceSelect = data => {
 
 const newsSourceChanged = () => {
   const select = document.getElementById("sourceSelect");
-  for (const option of select.options) {
-    if (option.value === select.value) {
-      newsRenderer.renderNewsBySourceId(select.value);
+  import('./newsRenderer.js').then(newsRenderer => {
+    for (const option of select.options) {
+      if (option.value === select.value) {
+        newsRenderer.renderNewsBySourceId(select.value);
+      }
     }
-  }
+  });
 };
