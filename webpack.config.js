@@ -2,7 +2,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   entry: {
-    './app': './src/app.js',
+    './app': './src/app.js'
   },
   plugins: [
     new HtmlWebpackPlugin({
@@ -11,9 +11,20 @@ module.exports = {
     })
   ],
   module: {
-    rules: [{
+    rules: [
+      {
+        test: /\.(html)$/,
+        use: {
+          loader: 'html-loader',
+          options: {
+            attrs: [':data-src']
+          }
+        }
+      },
+      {
         test: /\.scss$/,
-        use: [{
+        use: [
+          {
             loader: 'style-loader' // creates style nodes from JS strings
           },
           {
@@ -31,7 +42,10 @@ module.exports = {
           loader: 'babel-loader',
           options: {
             presets: ['@babel/preset-env'],
-            plugins: ["@babel/plugin-syntax-dynamic-import"]
+            plugins: [
+              '@babel/plugin-syntax-dynamic-import',
+              '@babel/plugin-proposal-class-properties'
+            ]
           }
         }
       }

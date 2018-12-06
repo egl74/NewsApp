@@ -1,15 +1,19 @@
-const ErrorPopup = (() => {
-    const instance;
+const popup = require('./errorPopup.html');
 
-    const createInstance = () => {
-        return {};
+class ErrorPopup {
+  static instance;
+  static popup;
+
+  constructor() {
+    if (this.instance) {
+      return this.instance;
     }
 
-    return {
-        getInstance: () => {
-            if (!instance) {
-                instance = createInstance();
-            }
-        }
-    }
-})();
+    this.popup = popup;
+    this.instance = this;
+  }
+}
+
+module.exports = {
+    ErrorPopup: ErrorPopup
+}

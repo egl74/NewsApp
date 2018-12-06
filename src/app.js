@@ -1,12 +1,15 @@
 import '../styles.scss';
 import '../lib/polyfill.min.js';
 
+
 const sharedConstants = require('./sharedConstants.js');
+const errorPopup = require('./errorPopup.js');
 
 document.addEventListener("DOMContentLoaded", () => {
   const goButton = document.getElementById("loadNewsButton");
   goButton.addEventListener("click", () => {
     newsSourceChanged();
+    console.log(new errorPopup.ErrorPopup());
   });
 });
 
