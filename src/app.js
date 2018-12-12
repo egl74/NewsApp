@@ -3,13 +3,11 @@ import '../lib/polyfill.min.js';
 
 
 const sharedConstants = require('./sharedConstants.js');
-const errorPopup = require('./errorPopup.js');
 
 document.addEventListener("DOMContentLoaded", () => {
   const goButton = document.getElementById("loadNewsButton");
   goButton.addEventListener("click", () => {
     newsSourceChanged();
-    console.log(new errorPopup.ErrorPopup());
   });
 });
 
@@ -25,24 +23,36 @@ getNewsSources();
 
 const createSourceSelect = data => {
   const list = document.getElementById("sourceSelect");
-  data.sources.forEach(source => {
-    var option = document.createElement("option");
-    const keyValues = Object.entries(source);
-    option.value = keyValues.filter(keyValue => keyValue[0] == "id")[0][1];
-    option.innerHTML = keyValues.filter(
-      keyValue => keyValue[0] == "name"
-    )[0][1];
-    list.appendChild(option);
+  getStore().then(store => {
+    store.sources = [];
+    data.sources.forEach(source => {
+      var option = document.createElement("option");
+      const keyValues = Object.entries(source);
+      store.sources.push({id: source.id, name: source.name});
+      option.value = keyValues.filter(keyValue => keyValue[0] == "id")[0][1];
+      option.innerHTML = keyValues.filter(
+        keyValue => keyValue[0] == "name"
+      )[0][1];
+      list.appendChild(option);
+    });
   });
 };
 
 const newsSourceChanged = () => {
   const select = document.getElementById("sourceSelect");
   import('./newsRenderer.js').then(newsRenderer => {
-    for (const option of select.options) {
-      if (option.value === select.value) {
-        newsRenderer.renderNewsBySourceId(select.value);
+    getStore().then(store => {
+      for (const source of store.sources) {
+        if (source.id === select.value) {
+          newsRenderer.renderNewsBySourceId(source.id);
+        }
       }
-    }
+    });
   });
 };
+
+const getStore = async () => {
+  return import('./newsSourceStore.js').then(module => {
+    return new module.NewsSourceStore();
+  })
+}
