@@ -1,12 +1,13 @@
 import '../styles.scss';
 import '../lib/polyfill.min.js';
-
+import './app-dispatcher.js';
+const AppDispatcher = require('./app-dispatcher.js').AppDispatcher;
 
 const sharedConstants = require('./sharedConstants.js');
 
-document.addEventListener("DOMContentLoaded", () => {
-  const goButton = document.getElementById("loadNewsButton");
-  goButton.addEventListener("click", () => {
+document.addEventListener('DOMContentLoaded', () => {
+  const goButton = document.getElementById('loadNewsButton');
+  goButton.addEventListener('click', () => {
     newsSourceChanged();
   });
 });
@@ -16,22 +17,25 @@ const getNewsSources = async () => {
     .then(async response => await response.json())
     .then(data => createSourceSelect(data))
     .catch(err => alert(err))
-    .finally(() => console.log("fetched"));
+    .finally(() => console.log('fetched'));
 };
 
 getNewsSources();
 
 const createSourceSelect = data => {
-  const list = document.getElementById("sourceSelect");
+  const list = document.getElementById('sourceSelect');
   getStore().then(store => {
     store.sources = [];
     data.sources.forEach(source => {
-      var option = document.createElement("option");
+      var option = document.createElement('option');
       const keyValues = Object.entries(source);
-      store.sources.push({id: source.id, name: source.name});
-      option.value = keyValues.filter(keyValue => keyValue[0] == "id")[0][1];
+      AppDispatcher.dispatch({
+        eventName: 'new-source',
+        newSource: { id: source.id, name: source.name }
+      });
+      option.value = keyValues.filter(keyValue => keyValue[0] == 'id')[0][1];
       option.innerHTML = keyValues.filter(
-        keyValue => keyValue[0] == "name"
+        keyValue => keyValue[0] == 'name'
       )[0][1];
       list.appendChild(option);
     });
@@ -39,7 +43,7 @@ const createSourceSelect = data => {
 };
 
 const newsSourceChanged = () => {
-  const select = document.getElementById("sourceSelect");
+  const select = document.getElementById('sourceSelect');
   import('./newsRenderer.js').then(newsRenderer => {
     getStore().then(store => {
       for (const source of store.sources) {
@@ -54,5 +58,5 @@ const newsSourceChanged = () => {
 const getStore = async () => {
   return import('./newsSourceStore.js').then(module => {
     return new module.NewsSourceStore();
-  })
-}
+  });
+};
