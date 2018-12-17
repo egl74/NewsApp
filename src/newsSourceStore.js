@@ -1,14 +1,20 @@
-export class NewsSourceStore {
-  static instance;
-  static sources;
+const AppDispatcher = require('./app-dispatcher.js').AppDispatcher;
 
-  constructor(){
-    if(NewsSourceStore.instance){
+export class NewsSourceStore {
+  static currentNewsSourceId;
+
+  constructor() {
+    if (NewsSourceStore.instance) {
       return NewsSourceStore.instance;
     }
 
     console.log('Singleton Store created');
-    NewsSourceStore.sources = [];
+    NewsSourceStore.currentNewsSourceId = null;
     NewsSourceStore.instance = this;
+  }
+
+  setNewsSource = sourceId => {
+    NewsSourceStore.currentNewsSourceId = sourceId;
+    new AppDispatcher().notify({eventName: 'source-changed', value: sourceId});
   }
 }
